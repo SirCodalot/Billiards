@@ -1,0 +1,5 @@
+main: me.codalot.billiards.Billiards
+name: Billiards
+
+version: 1.0
+api-version: 1.13
