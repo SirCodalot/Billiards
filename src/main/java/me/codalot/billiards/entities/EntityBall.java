@@ -67,11 +67,14 @@ public class EntityBall extends EntityZombie {
     public void collide(boolean horizontal) {
         Vector multiply = horizontal ? new Vector(-1, 1, 1) : new Vector(1, 1, -1);
         getBukkitEntity().setVelocity(getBukkitEntity().getVelocity().multiply(multiply));
+        getBukkitEntity().getWorld().playSound(getBukkitEntity().getLocation(), "billiards.ball_collision", (int) (5 * getStrength(getBukkitEntity().getVelocity())), 0);
     }
 
-    public void collide(Vector other) {
+    public void collide(Vector other, boolean cue) {
         getBukkitEntity().setVelocity(other);
         velocity = other;
+        if (!cue)
+            getBukkitEntity().getWorld().playSound(getBukkitEntity().getLocation(), "billiards.ball_collision", (int) (5 * getStrength(getBukkitEntity().getVelocity())), 0);
     }
 
     private void updateAppearance() {
@@ -208,6 +211,10 @@ public class EntityBall extends EntityZombie {
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    private static double getStrength(Vector vector) {
+        return Math.sqrt(Math.pow(vector.getX(), 2) + Math.pow(vector.getZ(), 2));
     }
 
 }

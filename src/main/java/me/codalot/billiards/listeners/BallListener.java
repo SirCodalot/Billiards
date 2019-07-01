@@ -20,23 +20,6 @@ import org.bukkit.util.Vector;
 public class BallListener extends CodalotListener {
 
     @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        EntityBall ball = getBall(event.getEntity());
-        if (ball == null)
-            return;
-
-        event.setCancelled(true);
-
-        Vector velocity;
-        if (event.getDamager() instanceof Projectile)
-            velocity = event.getDamager().getVelocity();
-        else
-            velocity = event.getDamager().getLocation().getDirection();
-
-        ball.collide(velocity);
-    }
-
-    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getItem() == null || !event.getItem().isSimilar(KeyItem.CUE.getItem()))
             return;
@@ -64,7 +47,8 @@ public class BallListener extends CodalotListener {
         if (ball == null)
             return;
 
-        ball.collide(player.getEyeLocation().getDirection().normalize().multiply(2 * Math.sqrt(strength)));
+        ball.getBukkitEntity().getWorld().playSound(ball.getBukkitEntity().getLocation(), "billiards.cue_collision", (int) (5 * strength), 0);
+        ball.collide(player.getEyeLocation().getDirection().normalize().multiply(2 * Math.sqrt(strength)), true);
     }
 
     @EventHandler
