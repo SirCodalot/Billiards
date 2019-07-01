@@ -12,7 +12,9 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 public enum KeyItem {
 
     POOL_BALL_SOLID(getItem(Material.LEATHER_BOOTS, ChatColor.GRAY + "Pool Ball", 10000001)),
-    POOL_BALL_STRIPED(getItem(Material.LEATHER_BOOTS, ChatColor.GRAY + "Pool Ball", 10000002));
+    POOL_BALL_STRIPED(getItem(Material.LEATHER_BOOTS, ChatColor.GRAY + "Pool Ball", 10000002)),
+
+    CUE(getItem(Material.BOW, ChatColor.GOLD + "Cue", 10000001));
 
     private ItemStack item;
 
@@ -37,6 +39,7 @@ public enum KeyItem {
     private static ItemStack getItem(Material material, String name, int model) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
+
 
         meta.setDisplayName(name);
         meta.setCustomModelData(model);

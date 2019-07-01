@@ -3,10 +3,12 @@ package me.codalot.billiards.entities;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.entity.Zombie;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -23,11 +25,17 @@ public class EntityBall extends EntityZombie {
     private boolean xCollision;
     private boolean zCollision;
 
+    @Setter private ItemStack model;
+
+    private Vector velocity;
+
     public EntityBall(EntityTypes types, World world) {
         super(types.ZOMBIE, world);
 
         xCollision = false;
         zCollision = false;
+
+        velocity = new Vector();
 
         clearPathfinders();
     }
@@ -37,22 +45,19 @@ public class EntityBall extends EntityZombie {
         setSilent(true);
         setInvulnerable(true);
         setNoGravity(true);
+        ((Zombie) getBukkitEntity()).getEquipment().clear();
         ((Zombie) getBukkitEntity()).setRemoveWhenFarAway(false);
-        ((Zombie) getBukkitEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 9999, 1, true, false));
     }
 
     @Override
     public void entityBaseTick() {
+        updateAppearance();
         fireTicks = 0;
 
         getBukkitEntity().setVelocity(getBukkitEntity().getVelocity().setY(0));
         detectCollision();
 
         super.entityBaseTick();
-    }
-
-    public void setModel(org.bukkit.inventory.ItemStack model) {
-        ((Zombie) getBukkitEntity()).getEquipment().setHelmet(model);
     }
 
     public void hit(Vector velocity) {
@@ -69,7 +74,10 @@ public class EntityBall extends EntityZombie {
         velocity = other;
     }
 
-    private Vector velocity;
+    private void updateAppearance() {
+        ((Zombie) getBukkitEntity()).getEquipment().setHelmet(model);
+        ((Zombie) getBukkitEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 9999, 1, true, false));
+    }
 
     private void detectCollision() {
 
